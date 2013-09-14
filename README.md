@@ -1,0 +1,1 @@
+This Project is about mulitple JADE agents that pick up packets and move them to their destination on the map. If the package is too heavy for an agent, he calls in backup
