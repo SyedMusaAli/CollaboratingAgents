@@ -323,7 +323,7 @@ public class StatesInfo
       Point M_P =new Point();
       M_P.x=-1;
       M_P.y=-1;
-      double M_D=0;
+      double M_D=10000;
       for (int i = 0; i < PacketPos.size(); i++)
       {
 	       double distance;
@@ -331,7 +331,7 @@ public class StatesInfo
 	       int px=PP.x;
 	       int py=PP.y; 
 	       distance = Math.sqrt(((ax-px)*(ax-px))+((ay-py)*(ay-py)));
-	       if ( M_D <= distance)
+	       if ( M_D > distance)
 	       {
 	            M_D = distance;       
 	            M_P = PP;   
