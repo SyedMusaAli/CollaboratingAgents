@@ -1,5 +1,6 @@
-//package MARF.LRTA;
 
+
+import agentsproject.Packet;
 import java.util.*;
 import java.awt.*;
 import java.io.*;
@@ -15,7 +16,7 @@ public class StatesInfo
   public java.util.List MultipleTargets;
   private Map Agents;
   //private ArrayList mytemp = new ArrayList();
-  private Map Packets;
+  private Map<Point, Packet> Packets;
   public int Count;
 
   public StatesInfo()
@@ -25,7 +26,7 @@ public class StatesInfo
     MyStates = new HashMap();
     Obstacles = new HashMap();
     Agents = new HashMap();
-    Packets = new HashMap();
+    Packets = new HashMap<>();
     MultipleTargets = new ArrayList();
     AgentStartPos = new ArrayList();
     PacketPos = new ArrayList();
@@ -154,7 +155,7 @@ public class StatesInfo
  * Change the logic of creation of obstacles on GUI because it overlaps with Agents and packets
  * 
  * */
-    if ((t == -1)&& (GetAgent(Randx, Randy) == -1)&& (GetPacket(Randx, Randy) == -1))
+    if ((t == -1)&& (GetAgent(Randx, Randy) == -1)&& (getPacket(Randx, Randy) == null))
     {
       String s = "1";
       String RIndex = Randx + "," + Randy + "";
@@ -290,28 +291,21 @@ public class StatesInfo
 /* ==================== QUAIN Code starts here ============================== */   
   private void AddPacket(int Randx, int Randy)
   {
-    String s = "1";
-    String RIndex = Randx + "," + Randy + "";
-    Packets.put(RIndex, s);
-    Point P = new Point();
-    P.x = Randx;
-    P.y = Randy;
-    PacketPos.add(P);
+    Point init = new Point(Randx, Randy);
+    
+    //TODO: Randomize these parameters...
+    Point end = new Point(1,1);
+    Packet p = new Packet(init, end, false);
+    
+    Packets.put(p.getPos(), p);
+    
+    PacketPos.add(p.getPos());
   }
   
-  private long GetPacket(int Randx, int Randy)
+  public Packet getPacket(int Randx, int Randy)
   {
-    String RIndex = Randx + "," + Randy + "";
-    String s;
-    s = (String) Packets.get(RIndex);
-    if (s != null)
-    {
-      return Integer.parseInt(s);
-    }
-    else
-    {
-      return -1;
-    }
+    Point RIndex = new Point(Randx , Randy);
+    return Packets.get(RIndex);
   }
   
 	public synchronized Point ChoosePacket(Point MyPos)
@@ -328,6 +322,8 @@ public class StatesInfo
       {
 	       double distance;
 	       Point PP = (Point) PacketPos.get(i);
+               if(getPacket(PP.x, PP.y).isTaken())
+                   continue;
 	       int px=PP.x;
 	       int py=PP.y; 
 	       distance = Math.sqrt(((ax-px)*(ax-px))+((ay-py)*(ay-py)));
