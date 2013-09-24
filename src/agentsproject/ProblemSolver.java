@@ -19,7 +19,8 @@ public class ProblemSolver
     Point T;
     DBLogger dblogger;
     int RunNo;
-
+    myPacket = null;
+    
     LA = new LRTAAlgo();
     /********************************************/
     /***** Getting Passed Arguments *************/
@@ -48,11 +49,18 @@ public class ProblemSolver
     MyTarget();
     
     LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
-    while (true)
+    while (LA.MyStateInfo.PacketPos.size() > 0 || myPacket != null)
     {
         System.out.println("At: "+LA.MyCurrentPos.x+","+LA.MyCurrentPos.y);
         System.out.println("Goal: "+LA.TargetPosition.x+","+LA.TargetPosition.y);
         System.out.println("Hval: "+LA.MyStateInfo.GetH(LA.MyCurrentPos.x, LA.MyCurrentPos.y));
+        
+        if(LA.MyStateInfo.getPacket(LA.TargetPosition) == null && myPacket== null)
+        {
+            LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
+            LA.MyStateInfo.ClearH();
+        }
+        
       /**********************************************************************/
       /******* Checking Whether Current State Is Goal State or Not **********/
       if (LA.MyCurrentPos.x == LocalTarget.x && LA.MyCurrentPos.y == LocalTarget.y)
@@ -95,12 +103,23 @@ public class ProblemSolver
       else if (LA.MyCurrentPos.x == LA.TargetPosition.x && LA.MyCurrentPos.y == LA.TargetPosition.y)
       {
       	System.out.println("Reached at ("+LA.TargetPosition.x+","+LA.TargetPosition.y+")");
-     	myPacket = LA.MyStateInfo.getPacket(LA.TargetPosition);
-        LA.MyStateInfo.removePacket(LA.TargetPosition);
+     	
         
-        
-        LA.TargetPosition = myPacket.getDestination();
-      	LA.MyStateInfo.ClearH();
+        if(myPacket == null)
+        {
+            myPacket = LA.MyStateInfo.getPacket(LA.TargetPosition);
+            LA.MyStateInfo.removePacket(LA.TargetPosition);
+            System.out.println("Picked up packet");
+            LA.TargetPosition = myPacket.getDestination();
+            LA.MyStateInfo.ClearH();
+        }
+        else
+        {
+            System.out.println("Delivered");
+            myPacket = null;
+            LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
+            LA.MyStateInfo.ClearH();
+        }
         
       	AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
       	ac.state = 1;
@@ -110,6 +129,7 @@ public class ProblemSolver
 
       if (LA.TargetObj.Caught == true)
       {
+          System.out.println("Done");
         break;
       }
       if(LA.TargetObj.GetTP(LocalTarget.x,LocalTarget.y)==1)
