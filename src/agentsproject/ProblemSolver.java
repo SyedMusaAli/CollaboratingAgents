@@ -1,5 +1,6 @@
 //package MARF.LRTA;
 
+import agentsproject.Packet;
 import jade.core.*;
 import java.awt.*;
 import java.util.*;
@@ -10,6 +11,9 @@ public class ProblemSolver
   private Point LocalTarget;
   private LRTAAlgo LA;
   private int LocalTargetPos;
+  
+  Packet myPacket;
+  
   protected void setup()
   {
     Point T;
@@ -46,6 +50,9 @@ public class ProblemSolver
     LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
     while (true)
     {
+        System.out.println("At: "+LA.MyCurrentPos.x+","+LA.MyCurrentPos.y);
+        System.out.println("Goal: "+LA.TargetPosition.x+","+LA.TargetPosition.y);
+        System.out.println("Hval: "+LA.MyStateInfo.GetH(LA.MyCurrentPos.x, LA.MyCurrentPos.y));
       /**********************************************************************/
       /******* Checking Whether Current State Is Goal State or Not **********/
       if (LA.MyCurrentPos.x == LocalTarget.x && LA.MyCurrentPos.y == LocalTarget.y)
@@ -88,8 +95,13 @@ public class ProblemSolver
       else if (LA.MyCurrentPos.x == LA.TargetPosition.x && LA.MyCurrentPos.y == LA.TargetPosition.y)
       {
       	System.out.println("Reached at ("+LA.TargetPosition.x+","+LA.TargetPosition.y+")");
-     	LA.MyStateInfo.removePacket(LA.TargetPosition);
-      	
+     	myPacket = LA.MyStateInfo.getPacket(LA.TargetPosition);
+        LA.MyStateInfo.removePacket(LA.TargetPosition);
+        
+        
+        LA.TargetPosition = myPacket.getDestination();
+      	LA.MyStateInfo.ClearH();
+        
       	AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
       	ac.state = 1;
       	
@@ -102,6 +114,7 @@ public class ProblemSolver
       }
       if(LA.TargetObj.GetTP(LocalTarget.x,LocalTarget.y)==1)
       {
+          System.out.println("yahan");
         MyTarget();
         LA.TargetPosition = LocalTarget;
       }
@@ -123,6 +136,7 @@ public class ProblemSolver
 
   private void MyTarget()
   {
+      System.out.println("in MyTarget()");
     int MinDistance = 999;
     int Distance;
     boolean CaughtTargets = true;

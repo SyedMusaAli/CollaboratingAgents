@@ -54,18 +54,7 @@ public class StatesInfo
       AddAgent(Randx, Randy);
       System.out.println("Agent->" + Randx + "," + Randy);
     }
-    /************************************************
-     ** Generate Packet Starting Position
-     ***********************************************/
-/* ==================== QUAIN Code starts here ============================== */ 
-    for (int i = 0; i < NoofPackets; i++)
-    {
-      Randx = (int) (Math.random() * Dimx);
-      Randy = (int) (Math.random() * Dimy);
-      AddPacket(Randx, Randy);
-      System.out.println("Packet->" + Randx + "," + Randy);
-    }
-/* ==================== QUAIN Code ends here ============================== */ 
+    
     /************************************************
      ** Generate Obstacles In Search Space
      ***********************************************/
@@ -102,6 +91,28 @@ public class StatesInfo
         }
       }
     }
+    
+    /************************************************
+     ** Generate Packet Starting Position
+     ***********************************************/
+/* ==================== QUAIN Code starts here ============================== */ 
+    for (int i = 0; i < NoofPackets; i++)
+    {
+        while (true)
+        {
+          Randx = (int) (Math.random() * Dimx);
+          Randy = (int) (Math.random() * Dimy);
+
+          if (GetAgent(Randx, Randy) == -1 && GetObstacle(Randx, Randy) == -1)
+          {
+            AddPacket(Randx, Randy);
+            System.out.println("Packet->" + Randx + "," + Randy);
+            break;
+          }
+        }
+      
+    }
+/* ==================== QUAIN Code ends here ============================== */ 
   }
 
 
@@ -289,27 +300,33 @@ public class StatesInfo
     }
   }
 /* ==================== QUAIN Code starts here ============================== */   
-  private void AddPacket(int Randx, int Randy)
-  {
-    Point init = new Point(Randx, Randy);
+    private void AddPacket(int Randx, int Randy)
+    {
+      Point init = new Point(Randx, Randy);
+
+      //TODO: Randomize these parameters...
+      int targetIndex = (int) (Math.random()*MultipleTargets.size());
+      Point end =(Point) MultipleTargets.get(targetIndex);
+      Packet p = new Packet(init, end, false);
+
+      Packets.put(p.getPos(), p);
+
+      PacketPos.add(p.getPos());
+    }
+
+    public Packet getPacket(int Randx, int Randy)
+    {
+      Point RIndex = new Point(Randx , Randy);
+      return Packets.get(RIndex);
+    }
     
-    //TODO: Randomize these parameters...
-    Point end = new Point(1,1);
-    Packet p = new Packet(init, end, false);
-    
-    Packets.put(p.getPos(), p);
-    
-    PacketPos.add(p.getPos());
-  }
+    public Packet getPacket(Point p)
+    {
+      return Packets.get(p);
+    }
   
-  public Packet getPacket(int Randx, int Randy)
-  {
-    Point RIndex = new Point(Randx , Randy);
-    return Packets.get(RIndex);
-  }
-  
-	public synchronized Point ChoosePacket(Point MyPos)
-	{
+    public synchronized Point ChoosePacket(Point MyPos)
+    {
       int ax=MyPos.x;
       int ay=MyPos.y;
       int j=0;
@@ -333,14 +350,20 @@ public class StatesInfo
 	            M_P = PP;   
 	            j=PacketPos.indexOf(i);
 	       }
-      }
-     return M_P;
-  }
-	public void removePacket(Point MyPos)
-	{
-		String RIndex = MyPos.x + "," + MyPos.y + "";
-		Packets.remove(RIndex);
-		PacketPos.remove(MyPos);
-	}
+        }
+       return M_P;
+    }
+
+    public void removePacket(Point MyPos)
+    {
+            String RIndex = MyPos.x + "," + MyPos.y + "";
+            Packets.remove(RIndex);
+            PacketPos.remove(MyPos);
+    }
+    
+    public void ClearH()
+    {
+        H.clear();
+    }
 /* ==================== QUAIN Code ends here ============================== */ 
 }
