@@ -112,6 +112,10 @@ public class ProblemSolver
             System.out.println("Picked up packet");
             LA.TargetPosition = myPacket.getDestination();
             LA.MyStateInfo.ClearH();
+            AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
+          	ac.state = 1;
+          	
+          	LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
         }
         else
         {
@@ -119,6 +123,10 @@ public class ProblemSolver
             myPacket = null;
             LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
             LA.MyStateInfo.ClearH();
+            AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
+          	ac.state = 0;
+          	
+          	LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
         }
         
       	AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
