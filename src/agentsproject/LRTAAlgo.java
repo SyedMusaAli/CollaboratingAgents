@@ -1,9 +1,12 @@
 
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LRTAAlgo implements Search
 {
+  private Map H;
   public Point MyCurrentPos;
   public MyComponent MyObj;
   public Target TargetObj;
@@ -29,6 +32,7 @@ public class LRTAAlgo implements Search
 
   public LRTAAlgo()
   {
+      H = new HashMap();
     SolutionLength=0;
     MinPosArr = new int[8];
     HGoalValues = new int[8];
@@ -263,6 +267,7 @@ public class LRTAAlgo implements Search
   public void UpdateHueristic(Point CP,int HueristicVal)
   {
     MyStateInfo.AddH(CP.x, CP.y,HueristicVal);
+    AddH(CP.x, CP.y,HueristicVal);
   }
   public void RunLRTA()
   {
@@ -442,4 +447,30 @@ public class LRTAAlgo implements Search
      }
      return MValue;
    }
+   public void ClearH()
+    {
+        H.clear();
+    }
+   
+   public synchronized void AddH(int Dimx, int Dimy, int HValue)
+  {
+    String RIndex = Dimx + "," + Dimy + "";
+    String s = HValue + "";
+    H.put(RIndex, s);
   }
+
+  public int GetH(int Dimx, int Dimy)
+  {
+    String RIndex = Dimx + "," + Dimy + "";
+    String s;
+    s = (String) H.get(RIndex);
+    if (s != null)
+    {
+      return Integer.parseInt(s);
+    }
+    else
+    {
+      return 0;
+    }
+  }
+}

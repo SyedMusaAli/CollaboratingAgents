@@ -39,7 +39,7 @@ public class UserGUI extends JFrame implements ActionListener
        VisualDepth=new JTextField("0-0");
        DifMazes=new JTextField("1");
        NoofTrials=new JTextField("1");
-       ObstRatio=new JTextField("50");
+       ObstRatio=new JTextField("20");
        ObstRatioIncrease=new JTextField("1");
        TotalRuns= new JTextField("1");
        PacketNo=new JTextField("1");
