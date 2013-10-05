@@ -63,7 +63,7 @@ public class ProblemSolver
         
       /**********************************************************************/
       /******* Checking Whether Current State Is Goal State or Not **********/
-      if (LA.MyCurrentPos.x == LocalTarget.x && LA.MyCurrentPos.y == LocalTarget.y)
+     /* if (LA.MyCurrentPos.x == LocalTarget.x && LA.MyCurrentPos.y == LocalTarget.y)
       {
         LA.TargetObj.AddTP(LocalTarget.x,LocalTarget.y,1);
         LA.MyStateInfo.Initialize();
@@ -71,7 +71,7 @@ public class ProblemSolver
         LA.TargetPosition = LocalTarget;
         /**********************************************************************/
         /******* If Yes Writes States In File And Calculate End Time **********/
-        if (LocalTarget.x == 0 && LocalTarget.y == 0)
+      /*  if (LocalTarget.x == 0 && LocalTarget.y == 0)
         {
           LA.TargetObj.Caught = true;
           LA.MyStateInfo.WriteStates();
@@ -100,7 +100,7 @@ public class ProblemSolver
           break;
         }
       }
-      else if (LA.MyCurrentPos.x == LA.TargetPosition.x && LA.MyCurrentPos.y == LA.TargetPosition.y)
+      else*/ if (LA.MyCurrentPos.x == LA.TargetPosition.x && LA.MyCurrentPos.y == LA.TargetPosition.y)
       {
       	System.out.println("Reached at ("+LA.TargetPosition.x+","+LA.TargetPosition.y+")");
      	
@@ -112,10 +112,7 @@ public class ProblemSolver
             System.out.println("Picked up packet");
             LA.TargetPosition = myPacket.getDestination();
             LA.MyStateInfo.ClearH();
-            AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
-          	ac.state = 1;
-          	
-          	LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
+            
         }
         else
         {
@@ -123,10 +120,6 @@ public class ProblemSolver
             myPacket = null;
             LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
             LA.MyStateInfo.ClearH();
-            AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
-          	ac.state = 0;
-          	
-          	LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
         }
         
       	AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
