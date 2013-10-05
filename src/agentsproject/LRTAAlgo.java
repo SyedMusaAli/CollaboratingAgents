@@ -266,7 +266,7 @@ public class LRTAAlgo implements Search
 
   public void UpdateHueristic(Point CP,int HueristicVal)
   {
-    MyStateInfo.AddH(CP.x, CP.y,HueristicVal);
+ //   MyStateInfo.AddH(CP.x, CP.y,HueristicVal);
     AddH(CP.x, CP.y,HueristicVal);
   }
   public void RunLRTA()
@@ -309,7 +309,7 @@ public class LRTAAlgo implements Search
    private int GetGoalDistance(Point CP)
    {
      int Hval,GoalDistance;
-     Hval = MyStateInfo.GetH(CP.x, CP.y);
+     Hval = GetH(CP.x, CP.y);
      if (Hval == 0)
      {
        GoalDistance = Math.abs(TargetPosition.x -

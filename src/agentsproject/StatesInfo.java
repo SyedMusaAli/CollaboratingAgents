@@ -357,7 +357,7 @@ public class StatesInfo
     public void removePacket(Point MyPos)
     {
             String RIndex = MyPos.x + "," + MyPos.y + "";
-            Packets.remove(RIndex);
+            Packets.remove(MyPos);
             PacketPos.remove(MyPos);
     }
     

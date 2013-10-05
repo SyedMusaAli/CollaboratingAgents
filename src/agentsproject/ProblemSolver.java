@@ -55,8 +55,15 @@ public class ProblemSolver
     while (LA.MyStateInfo.PacketPos.size() > 0 || myPacket != null)
     {
         System.out.println(name+" At: "+LA.MyCurrentPos.x+","+LA.MyCurrentPos.y);
-        System.out.println(name+" Goal: "+LA.TargetPosition.x+","+LA.TargetPosition.y);
-        System.out.println(name+" Hval: "+LA.GetH(LA.MyCurrentPos.x, LA.MyCurrentPos.y));
+        if(myPacket == null)
+        {
+            System.out.println(name+" Packet: "+LA.TargetPosition.x+","+LA.TargetPosition.y);
+        }
+        else
+        {
+            System.out.println(name+" Destination: "+LA.TargetPosition.x+","+LA.TargetPosition.y);
+        }
+        
         
         if(LA.MyStateInfo.getPacket(LA.TargetPosition) == null && myPacket== null)
         {
@@ -77,9 +84,9 @@ public class ProblemSolver
         {
             myPacket = LA.MyStateInfo.getPacket(LA.TargetPosition);
             LA.MyStateInfo.removePacket(LA.TargetPosition);
-            System.out.println(name+" Picked up packet");
+            System.out.println(name+" Picked up packet for "+myPacket.getDestination().x+","+myPacket.getDestination().y+")");
             LA.TargetPosition = myPacket.getDestination();
-            LA.MyStateInfo.ClearH();
+            LA.ClearH();
             
         }
         else
@@ -87,7 +94,7 @@ public class ProblemSolver
             System.out.println(name+" Delivered");
             myPacket = null;
             LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
-            LA.MyStateInfo.ClearH();
+            LA.ClearH();
         }
         
       	AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
