@@ -54,6 +54,8 @@ public class ProblemSolver
     LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
     while (LA.MyStateInfo.PacketPos.size() > 0 || myPacket != null)
     {
+        AgentContainer stt = LA.MyObj.MyPoints.get(LA.CurrentPos);
+      	System.out.println(name+" "+stt.state );
         System.out.println(name+" At: "+LA.MyCurrentPos.x+","+LA.MyCurrentPos.y);
         if(myPacket == null)
         {
@@ -87,7 +89,9 @@ public class ProblemSolver
             System.out.println(name+" Picked up packet for "+myPacket.getDestination().x+","+myPacket.getDestination().y+")");
             LA.TargetPosition = myPacket.getDestination();
             LA.ClearH();
-            
+            AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
+            ac.state = 1;
+            LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
         }
         else
         {
@@ -95,12 +99,12 @@ public class ProblemSolver
             myPacket = null;
             LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
             LA.ClearH();
+            AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
+            ac.state = 0;
+            LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
         }
         
-      	AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
-      	ac.state = 1;
       	
-      	LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
       }
         
      /* if (LA.MyCurrentPos.x == LocalTarget.x && LA.MyCurrentPos.y == LocalTarget.y)
