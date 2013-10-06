@@ -11,6 +11,7 @@ public class ProblemSolver
   private Point LocalTarget;
   private LRTAAlgo LA;
   private int LocalTargetPos;
+  private boolean isWaiting;
   
   Packet myPacket;
   
@@ -40,7 +41,8 @@ public class ProblemSolver
     dblogger = (DBLogger) args[7];
     RunNo = Integer.parseInt( (String) args[8]);
     LA.LC = Integer.parseInt( (String) args[9]);
-
+    isWaiting = false;
+    
     /********************************************/
     /******* Calculating Start Time *************/
     Date STime = new Date();
@@ -54,6 +56,27 @@ public class ProblemSolver
     LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
     while (LA.MyStateInfo.PacketPos.size() > 0 || myPacket != null)
     {
+        if(isWaiting)
+        {
+            if(myPacket.getWeight() > 0)
+            {
+                continue;
+            }
+            else
+            {
+                isWaiting = false;
+                 //pick it up
+                LA.MyStateInfo.removePacket(LA.TargetPosition);
+                System.out.println(name+" Picked up packet for "+myPacket.getDestination().x+","+myPacket.getDestination().y+")");
+                LA.TargetPosition = myPacket.getDestination();
+                LA.ClearH();
+                AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
+                ac.state = 1;
+                LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
+                continue;
+            }
+        }
+        
         AgentContainer stt = LA.MyObj.MyPoints.get(LA.CurrentPos);
       	System.out.println(name+" "+stt.state );
         System.out.println(name+" At: "+LA.MyCurrentPos.x+","+LA.MyCurrentPos.y);
@@ -66,12 +89,21 @@ public class ProblemSolver
             System.out.println(name+" Destination: "+LA.TargetPosition.x+","+LA.TargetPosition.y);
         }
         
-        
-        if(LA.MyStateInfo.getPacket(LA.TargetPosition) == null && myPacket== null)
+        if(myPacket== null)
         {
-            System.out.println(name+" Choosing new packet");
-            LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
-            LA.MyStateInfo.ClearH();
+            Point help = LA.MyStateInfo.checkHelpCall();
+            if(help != null)
+            {
+                System.out.println(name+" Responding to call");
+                LA.TargetPosition = help;
+                LA.ClearH();
+            }
+            else if(LA.MyStateInfo.getPacket(LA.TargetPosition) == null)
+            {
+                System.out.println(name+" Choosing new packet");
+                LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
+                LA.ClearH();
+            }
         }
         
       /**********************************************************************/
@@ -82,16 +114,41 @@ public class ProblemSolver
       	System.out.println(name+" Reached at ("+LA.TargetPosition.x+","+LA.TargetPosition.y+")");
      	
         
+        
         if(myPacket == null)
         {
             myPacket = LA.MyStateInfo.getPacket(LA.TargetPosition);
-            LA.MyStateInfo.removePacket(LA.TargetPosition);
-            System.out.println(name+" Picked up packet for "+myPacket.getDestination().x+","+myPacket.getDestination().y+")");
-            LA.TargetPosition = myPacket.getDestination();
-            LA.ClearH();
-            AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
-            ac.state = 1;
-            LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
+            
+            if(myPacket == null)
+            {
+               continue; 
+            }
+            
+            //Try to pick up
+            myPacket.lift();
+            
+            //Check if still too heavy
+            if(myPacket.getWeight() > 0)
+            {
+                System.out.println(name+" Calling for help");
+                LA.MyStateInfo.callForHelp(LA.MyCurrentPos);
+                AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
+                ac.state = 0;
+                LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
+                isWaiting = true;
+                continue;
+            }
+            else //if light enough
+            {
+                //pick it up
+                LA.MyStateInfo.removePacket(LA.TargetPosition);
+                System.out.println(name+" Picked up packet for "+myPacket.getDestination().x+","+myPacket.getDestination().y+")");
+                LA.TargetPosition = myPacket.getDestination();
+                LA.ClearH();
+                AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
+                ac.state = 1;
+                LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
+            }
         }
         else
         {

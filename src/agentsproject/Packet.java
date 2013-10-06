@@ -13,8 +13,18 @@ public class Packet {
         return Pos;
     }
 
-    public boolean isHeavy() {
-        return Heavy;
+    public int getWeight() {
+        return weight;
+    }
+    
+    public void lift()
+    {
+        weight--;
+    }
+    
+    public void drop()
+    {
+        weight++;
     }
 
     public boolean isTaken() {
@@ -24,20 +34,39 @@ public class Packet {
     public Point getDestination() {
         return Destination;
     }
-   boolean Heavy;
+   int weight;
    boolean taken;
    Point Destination;
    
-   public Packet(Point init, Point end, boolean H)
+   public Packet(Point init, Point end)
    {
        Pos = new Point(init);
        Destination = new Point(end);
-       Heavy = H;
+       double rand = Math.random();
+       weight = ((int) (rand*10))/5+1;
+       System.out.println("weight: "+weight);
    }
    
    public String getID()
    {
        String s = Pos.x+","+Pos.y;
        return s;
+   }
+   
+   private double distanceBetween(Point a, Point b)
+   {
+       return Math.sqrt(((a.x-b.x)*(a.x-b.x))+((a.y-b.y)*(a.y-b.y)));
+   }
+   
+   public double getDistance(Point p)
+   {
+       return distanceBetween(Pos, p);
+   }
+   
+   public boolean isCloserThan(Point p, Point from)
+   {
+       double d1 = getDistance(from);
+       double d2 = distanceBetween(p, from);
+       return d1 < d2;
    }
 }

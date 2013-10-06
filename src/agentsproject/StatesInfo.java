@@ -4,6 +4,7 @@ import agentsproject.Packet;
 import java.util.*;
 import java.awt.*;
 import java.io.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class StatesInfo
 {
@@ -18,6 +19,7 @@ public class StatesInfo
   //private ArrayList mytemp = new ArrayList();
   private Map<Point, Packet> Packets;
   public int Count;
+  public ConcurrentLinkedQueue<Point> helpCalls;
 
   public StatesInfo()
   {
@@ -31,6 +33,7 @@ public class StatesInfo
     AgentStartPos = new ArrayList();
     PacketPos = new ArrayList();
     WritedFile = false;
+    helpCalls = new ConcurrentLinkedQueue<>();
   }
 
   public void Initialize()
@@ -307,7 +310,7 @@ public class StatesInfo
       //TODO: Randomize these parameters...
       int targetIndex = (int) (Math.random()*MultipleTargets.size());
       Point end =(Point) MultipleTargets.get(targetIndex);
-      Packet p = new Packet(init, end, false);
+      Packet p = new Packet(init, end);
 
       Packets.put(p.getPos(), p);
 
@@ -320,7 +323,7 @@ public class StatesInfo
       return Packets.get(RIndex);
     }
     
-    public Packet getPacket(Point p)
+    public synchronized Packet getPacket(Point p)
     {
       return Packets.get(p);
     }
@@ -364,6 +367,16 @@ public class StatesInfo
     public void ClearH()
     {
         H.clear();
+    }
+    
+    public void callForHelp(Point p)
+    {
+        helpCalls.add(p);
+    }
+    
+    public synchronized Point checkHelpCall()
+    {
+        return helpCalls.poll();
     }
 /* ==================== QUAIN Code ends here ============================== */ 
 }
