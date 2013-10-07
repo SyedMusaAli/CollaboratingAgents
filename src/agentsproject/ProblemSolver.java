@@ -131,7 +131,7 @@ public class ProblemSolver
             if(myPacket.getWeight() > 0)
             {
                 System.out.println(name+" Calling for help");
-                LA.MyStateInfo.callForHelp(LA.MyCurrentPos);
+                LA.MyStateInfo.callForHelp(LA.MyCurrentPos, myPacket.getWeight() );
                 AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
                 ac.state = 0;
                 LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
@@ -142,6 +142,7 @@ public class ProblemSolver
             {
                 //pick it up
                 LA.MyStateInfo.removePacket(LA.TargetPosition);
+                LA.MyStateInfo.cancelHelpCall(LA.MyCurrentPos);
                 System.out.println(name+" Picked up packet for "+myPacket.getDestination().x+","+myPacket.getDestination().y+")");
                 LA.TargetPosition = myPacket.getDestination();
                 LA.ClearH();

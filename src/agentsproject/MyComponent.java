@@ -110,7 +110,7 @@ class MyComponent
     /**************************************************
      ** Draw Path Of Each Agent On GUI
      ***************************************************/
-    Iterator KeyIterator = MyStatesObj.MyStates.keySet().iterator();
+ /*   Iterator KeyIterator = MyStatesObj.MyStates.keySet().iterator();
     while (KeyIterator.hasNext())
     {
       PTmp = (String) KeyIterator.next();
@@ -128,7 +128,7 @@ class MyComponent
     g2d.setColor(Color.DARK_GRAY);
     g2d.drawString(MyStatesObj.Count + "", (4 * MAP_SQUAREX),
                    ( 4 * MAP_SQUAREY));
-
+*/
   }
 
   public void AddPoint(int x, int y)

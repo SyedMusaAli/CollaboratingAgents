@@ -105,10 +105,11 @@ public class StatesInfo
         {
           Randx = (int) (Math.random() * Dimx);
           Randy = (int) (Math.random() * Dimy);
+          int weight = ((int)(Math.random()*100))%NoofAgents+1;
 
           if (GetAgent(Randx, Randy) == -1 && GetObstacle(Randx, Randy) == -1)
           {
-            AddPacket(Randx, Randy);
+            AddPacket(Randx, Randy, weight);
             System.out.println("Packet->" + Randx + "," + Randy);
             break;
           }
@@ -303,14 +304,14 @@ public class StatesInfo
     }
   }
 /* ==================== QUAIN Code starts here ============================== */   
-    private void AddPacket(int Randx, int Randy)
+    private void AddPacket(int Randx, int Randy, int weight)
     {
       Point init = new Point(Randx, Randy);
 
       //TODO: Randomize these parameters...
       int targetIndex = (int) (Math.random()*MultipleTargets.size());
       Point end =(Point) MultipleTargets.get(targetIndex);
-      Packet p = new Packet(init, end);
+      Packet p = new Packet(init, end, weight);
 
       Packets.put(p.getPos(), p);
 
@@ -357,7 +358,7 @@ public class StatesInfo
        return M_P;
     }
 
-    public void removePacket(Point MyPos)
+    public synchronized void  removePacket(Point MyPos)
     {
             String RIndex = MyPos.x + "," + MyPos.y + "";
             Packets.remove(MyPos);
@@ -369,14 +370,20 @@ public class StatesInfo
         H.clear();
     }
     
-    public void callForHelp(Point p)
+    public void callForHelp(Point p, int weight)
     {
-        helpCalls.add(p);
+        for(int i = 0; i < weight; i++)
+            helpCalls.add(p);
     }
     
     public synchronized Point checkHelpCall()
     {
         return helpCalls.poll();
+    }
+    
+    public void cancelHelpCall(Point p)
+    {
+        while(helpCalls.remove(p));
     }
 /* ==================== QUAIN Code ends here ============================== */ 
 }

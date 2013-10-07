@@ -38,12 +38,11 @@ public class Packet {
    boolean taken;
    Point Destination;
    
-   public Packet(Point init, Point end)
+   public Packet(Point init, Point end, int w)
    {
        Pos = new Point(init);
        Destination = new Point(end);
-       double rand = Math.random();
-       weight = ((int) (rand*10))/5+1;
+       weight = w;
        System.out.println("weight: "+weight);
    }
    
