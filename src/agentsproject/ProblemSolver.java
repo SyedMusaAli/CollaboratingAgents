@@ -204,7 +204,7 @@ public class ProblemSolver
       }
       else*/
 
-      if (LA.TargetObj.Caught == true)
+    /*  if (LA.TargetObj.Caught == true)
       {
           System.out.println("Done");
         break;
@@ -214,7 +214,7 @@ public class ProblemSolver
           System.out.println("yahan");
         MyTarget();
         LA.TargetPosition = LocalTarget;
-      }
+      }*/
       /********************************************/
       /******* Calling LRTA* Algorithm ************/
       LA.RunLRTA();
