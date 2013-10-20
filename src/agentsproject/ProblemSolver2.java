@@ -15,6 +15,7 @@ public class ProblemSolver2
   private String state;
   private HashMap<String, Double> Q;
   private Packet myPacket;
+  public String name;
   
   protected void setup()
   {
@@ -46,7 +47,8 @@ public class ProblemSolver2
     RunNo = Integer.parseInt( (String) args[8]);
     LA.LC = Integer.parseInt( (String) args[9]);
     isWaiting = false;
-    
+    name = this.getAID().getName();
+    name = name.substring(0, name.indexOf("@"));
     /********************************************/
     /******* Calculating Start Time *************/
     Date STime = new Date();
@@ -60,11 +62,21 @@ public class ProblemSolver2
     LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
     while (LA.MyStateInfo.PacketPos.size() > 0 || myPacket != null)
     {
+        System.out.println(name+" At: "+LA.MyCurrentPos.x+","+LA.MyCurrentPos.y);
        ArrayList<String> list = getActions();
        String selectedAction = chooseAction(list);
        state = performAction(selectedAction);
        //update Q
        
+       try
+      {
+        LA.myGui.RePaintWindow();
+        doWait(200);
+      }
+      catch (Exception ex)
+      {
+
+      }
     }
   }
 
@@ -117,7 +129,7 @@ public class ProblemSolver2
       {
           ans.add("ChoosePacket");
       }
-      if(state.equalsIgnoreCase("Free") || state.equalsIgnoreCase("WaitingForHelp") || state.equalsIgnoreCase("MovingTowardsHelpCall"))
+      if((state.equalsIgnoreCase("Free") || state.equalsIgnoreCase("WaitingForHelp") || state.equalsIgnoreCase("MovingToFreePacket")) && LA.MyStateInfo.checkHelpCall())
       {
           ans.add("RespondToHelpCall");
       }
@@ -130,6 +142,7 @@ public class ProblemSolver2
       double max = -100;
       for(String str : list )
       {
+          System.out.println(name+" "+state+":"+str+" "+Q.get(state+":"+str));
           if(Q.get(state+":"+str) > max)
           {
               max = Q.get(state+":"+str);
@@ -142,6 +155,116 @@ public class ProblemSolver2
   private String performAction(String action)
   {
       String newState = state;
+      System.out.println(name+" "+state+":"+action);
+      if(action.equalsIgnoreCase("ChoosePacket"))
+      {
+          System.out.println(name+" Choosing new packet");
+          LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
+          LA.ClearH(); 
+          newState = "MovingToFreePacket";
+      }
+      
+      if(action.equalsIgnoreCase("RespondToHelpCall"))
+      {
+          Point help = LA.MyStateInfo.getHelpCall();
+          if(help != null)
+          {
+              System.out.println(name+" Responding to call");
+              LA.TargetPosition = help;
+              LA.ClearH();
+          }
+          newState = "RespondingToHelpCall";
+      }
+      
+      if(state.equalsIgnoreCase("WaitingForHelp"))
+      {
+          if(myPacket.getWeight() == 0)
+            {
+                 //pick it up
+                LA.MyStateInfo.removePacket(LA.TargetPosition);
+                System.out.println(name+" Picked up packet for "+myPacket.getDestination().x+","+myPacket.getDestination().y+")");
+                LA.TargetPosition = myPacket.getDestination();
+                LA.ClearH();
+                AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
+                ac.state = 1;
+                LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
+                newState = "MovingToDestination";
+            }
+      }
+      
+      if(action.equalsIgnoreCase("Continue") && !state.equalsIgnoreCase("WaitingForHelp"))
+      {
+          if(state.equalsIgnoreCase("MovingToFreePacket"))
+          {
+            if(LA.MyStateInfo.getPacket(LA.TargetPosition) == null)
+            {
+                  System.out.println(name+" Choosing new packet");
+                  LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
+                  LA.ClearH();
+                  return state;
+            }
+          }
+          
+            if (LA.MyCurrentPos.x == LA.TargetPosition.x && LA.MyCurrentPos.y == LA.TargetPosition.y)
+            {
+              System.out.println(name+" Reached at ("+LA.TargetPosition.x+","+LA.TargetPosition.y+")");
+
+
+
+              if(myPacket == null)
+              {
+                  myPacket = LA.MyStateInfo.getPacket(LA.TargetPosition);
+
+                  if(myPacket == null)
+                  {
+                     return "Free"; 
+                  }
+
+                  //Try to pick up
+                  myPacket.lift();
+
+                  //Check if still too heavy
+                  if(myPacket.getWeight() > 0)
+                  {
+                      System.out.println(name+" Calling for help");
+                      LA.MyStateInfo.callForHelp(LA.MyCurrentPos, myPacket.getWeight() );
+                      AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
+                      ac.state = 0;
+                      LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
+                      isWaiting = true;
+                      return "WaitingForHelp";
+                  }
+                  else //if light enough
+                  {
+                      //pick it up
+                      LA.MyStateInfo.removePacket(LA.TargetPosition);
+                      LA.MyStateInfo.cancelHelpCall(LA.MyCurrentPos);
+                      System.out.println(name+" Picked up packet for "+myPacket.getDestination().x+","+myPacket.getDestination().y+")");
+                      LA.TargetPosition = myPacket.getDestination();
+                      LA.ClearH();
+                      AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
+                      ac.state = 1;
+                      LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
+                      return "MovingToDestination";
+                  }
+              }
+              else
+              {
+                  System.out.println(name+" Delivered");
+                  myPacket = null;
+                  LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
+                  LA.ClearH();
+                  AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
+                  ac.state = 0;
+                  LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
+                  return "Free";
+              }
+
+
+            }
+          
+          LA.RunLRTA();
+      }
       
       return newState;
   }
@@ -154,7 +277,7 @@ public class ProblemSolver2
       Q.put("MovingToFreePacket:Continue", 1.0);
       Q.put("MovingToFreePacket:RespondToHelpCall", 2.0);
       Q.put("MovingToDestination:Continue", 1.0);
-      Q.put("RespondingToHelp:Continue", 1.0);
+      Q.put("RespondingToHelpCall:Continue", 1.0);
       Q.put("WaitingForHelp:Continue", 2.0);
       Q.put("WaitingForHelp:ChoosePacket", 1.0);
       Q.put("WaitingForHelp:RespondToHelpCall", 1.5);

@@ -91,7 +91,7 @@ public class ProblemSolver
         
         if(myPacket== null)
         {
-            Point help = LA.MyStateInfo.checkHelpCall();
+            Point help = LA.MyStateInfo.getHelpCall();
             if(help != null)
             {
                 System.out.println(name+" Responding to call");

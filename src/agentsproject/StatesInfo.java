@@ -376,9 +376,14 @@ public class StatesInfo
             helpCalls.add(p);
     }
     
-    public synchronized Point checkHelpCall()
+    public synchronized Point getHelpCall()
     {
         return helpCalls.poll();
+    }
+    
+    public synchronized boolean checkHelpCall()
+    {
+        return !helpCalls.isEmpty();
     }
     
     public void cancelHelpCall(Point p)

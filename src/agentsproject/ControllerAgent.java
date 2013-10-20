@@ -132,7 +132,7 @@ public class ControllerAgent
                   getContainerController();
               try
               {
-                a = Acontainer.createNewAgent(name, ProblemSolver.class.getName(),
+                a = Acontainer.createNewAgent(name, ProblemSolver2.class.getName(),
                                               args);
                 MyAgents.add(a);
                 MyAgentsLength++;
