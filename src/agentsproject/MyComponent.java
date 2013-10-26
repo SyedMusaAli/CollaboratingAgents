@@ -85,12 +85,18 @@ class MyComponent
     }
     // Draw packets
 /* ==================== QUAIN Code starts here ============================== */    
-    g2d.setColor(Color.PINK);
-	for (int i = 0; i < MyStatesObj.PacketPos.size(); i++)
+    
+    for (int i = 0; i < MyStatesObj.PacketPos.size(); i++)
     {
-		location = (Point) MyStatesObj.PacketPos.get(i);
-		g2d.fill3DRect( (location.x * MAP_SQUAREX), (location.y * MAP_SQUAREY),
-				MAP_SQUAREX, MAP_SQUAREY, true);
+        g2d.setColor(Color.PINK);
+        location = (Point) MyStatesObj.PacketPos.get(i);
+        g2d.fill3DRect( (location.x * MAP_SQUAREX), (location.y * MAP_SQUAREY),
+                        MAP_SQUAREX, MAP_SQUAREY, true);
+
+        g2d.setColor(Color.BLACK);
+        int weight = MyStatesObj.getPacket(location).getWeight();
+        g2d.drawString(weight+"", (location.x * MAP_SQUAREX), ((location.y+1) * MAP_SQUAREY));
+                
     }
 /* ==================== QUAIN Code ends here ============================== */
     /**************************************************

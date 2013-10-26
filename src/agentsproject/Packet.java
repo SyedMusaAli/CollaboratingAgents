@@ -17,12 +17,12 @@ public class Packet {
         return weight;
     }
     
-    public void lift()
+    public synchronized void lift()
     {
         weight--;
     }
     
-    public void drop()
+    public synchronized void drop()
     {
         weight++;
     }

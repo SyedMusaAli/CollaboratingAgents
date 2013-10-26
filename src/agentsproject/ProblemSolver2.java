@@ -166,6 +166,11 @@ public class ProblemSolver2
       double reward = 0;
       if(action.equalsIgnoreCase("ChoosePacket"))
       {
+          if(state.equalsIgnoreCase("WaitingForHelp"))
+          {
+              myPacket.drop();
+              myPacket = null;
+          }
           System.out.println(name+" Choosing new packet");
           LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
           LA.ClearH(); 
@@ -174,6 +179,11 @@ public class ProblemSolver2
       
       if(action.equalsIgnoreCase("RespondToHelpCall"))
       {
+          if(state.equalsIgnoreCase("WaitingForHelp"))
+          {
+              myPacket.drop();
+              myPacket = null;
+          }
           Point help = LA.MyStateInfo.getHelpCall();
           if(help != null)
           {
@@ -182,6 +192,7 @@ public class ProblemSolver2
               LA.ClearH();
           }
           state = "RespondingToHelpCall";
+          reward = 1;
       }
       
       if(state.equalsIgnoreCase("WaitingForHelp"))
@@ -197,6 +208,7 @@ public class ProblemSolver2
                 ac.state = 1;
                 LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
                 state = "MovingToDestination";
+                reward = 1;
             }
       }
       
@@ -253,6 +265,7 @@ public class ProblemSolver2
                       ac.state = 1;
                       LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
                       state = "MovingToDestination";
+                      reward = 1;
                   }
               }
               else
@@ -265,7 +278,7 @@ public class ProblemSolver2
                   ac.state = 0;
                   LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
                   state = "Free";
-                  reward = 1;
+                  reward = 10;
               }
 
 
@@ -282,6 +295,7 @@ public class ProblemSolver2
   private void initializeQ()
   {
       Q = new HashMap<>();
+      
       Q.put("Free:ChoosePacket", 1.0);
       Q.put("Free:RespondToHelpCall", 2.0);
       Q.put("MovingToFreePacket:Continue", 1.0);
@@ -291,6 +305,17 @@ public class ProblemSolver2
       Q.put("WaitingForHelp:Continue", 2.0);
       Q.put("WaitingForHelp:ChoosePacket", 1.0);
       Q.put("WaitingForHelp:RespondToHelpCall", 1.5);
+      /*
+       Q.put("Free:ChoosePacket", 1.0);
+      Q.put("Free:RespondToHelpCall", 1.0);
+      Q.put("MovingToFreePacket:Continue", 1.0);
+      Q.put("MovingToFreePacket:RespondToHelpCall", 1.0);
+      Q.put("MovingToDestination:Continue", 1.0);
+      Q.put("RespondingToHelpCall:Continue", 1.0);
+      Q.put("WaitingForHelp:Continue", 1.0);
+      Q.put("WaitingForHelp:ChoosePacket", 1.0);
+      Q.put("WaitingForHelp:RespondToHelpCall", 1.0);
+      */
   }
   
   private double getMaxQ()
