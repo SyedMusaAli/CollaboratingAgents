@@ -381,6 +381,11 @@ public class StatesInfo
         return helpCalls.poll();
     }
     
+    public synchronized Point peekHelpCall()
+    {
+        return helpCalls.peek();
+    }
+    
     public synchronized boolean checkHelpCall()
     {
         return !helpCalls.isEmpty();
