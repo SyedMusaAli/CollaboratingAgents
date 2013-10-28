@@ -23,9 +23,6 @@ public class ProblemSolver2
     DBLogger dblogger;
     int RunNo;
     myPacket = null;
-    state = "Free";
-    initializeQ();
-    
     
     LA = new LRTAAlgo();
     /********************************************/
@@ -59,16 +56,28 @@ public class ProblemSolver2
     String name = this.getAID().getName();
     name = name.substring(0, name.indexOf("@"));
     
-    LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
+   //variables for Q Learning
     double r;
     double alpha = 0.25;
+    state = "Free";
+    
+    //Initialize Q (the state-action policy)
+    initializeQ();
+    
     while (LA.MyStateInfo.PacketPos.size() > 0 || myPacket != null)
     {
         String pastState;
         System.out.println(name+" At: "+LA.MyCurrentPos.x+","+LA.MyCurrentPos.y);
+        
+        //get available actions at current state
        ArrayList<String> list = getActions();
+       
+       //From avaialable actions, choose one with highest value of Q
        String selectedAction = chooseAction(list);
+       
        pastState = state;
+       
+       //perform selected action, and record reward
        r = performAction(selectedAction);
        
        //update Q
@@ -126,6 +135,7 @@ public class ProblemSolver2
     }
   }
   
+  //gets list of actions based on current state
   private ArrayList<String> getActions()
   {
       ArrayList<String> ans = new ArrayList<>();
@@ -133,14 +143,18 @@ public class ProblemSolver2
       {
           ans.add("Continue");
       }
-      if(state.equalsIgnoreCase("Free"))// || state.equalsIgnoreCase("WaitingForHelp"))
+      if(state.equalsIgnoreCase("Free"))
       {
           ans.add("ChoosePacket");
       }
+      
+      //if someone needs help
       if((state.equalsIgnoreCase("Free") || state.equalsIgnoreCase("WaitingForHelp") || state.equalsIgnoreCase("MovingToFreePacket")) && LA.MyStateInfo.checkHelpCall())
       {
           Point temp = LA.MyStateInfo.peekHelpCall();
-          if( ! ( temp.x == LA.MyCurrentPos.x && temp.y == LA.MyCurrentPos.y ))
+          
+          //if the helpcall wasn't issued for the same packet which we are holding
+          if( ! ( temp.x == LA.MyCurrentPos.x && temp.y == LA.MyCurrentPos.y )) 
           {
                 ans.add("RespondToHelpCall");
           }
@@ -152,6 +166,8 @@ public class ProblemSolver2
   {
       String ans = null;
       double max = -100;
+      
+      //choose action with highest value of Q
       for(String str : list )
       {
          System.out.println(name+" "+state+":"+str+" "+Q.get(state+":"+str));
@@ -167,17 +183,23 @@ public class ProblemSolver2
   private double performAction(String action)
   {
       System.out.println(name+" "+state+":"+action);
+      
+      //Default reward (negative reward to discourage time wasting)
       double reward = -0.1;
+      
       if(action.equalsIgnoreCase("ChoosePacket"))
       {
           if(state.equalsIgnoreCase("WaitingForHelp"))
           {
+              //drop existing packet
               myPacket.drop();
               myPacket = null;
           }
           System.out.println(name+" Choosing new packet");
           LA.TargetPosition = LA.MyStateInfo.ChoosePacket(LA.MyCurrentPos);
           LA.ClearH(); 
+          
+          //update state
           state = "MovingToFreePacket";
       }
       
@@ -195,12 +217,17 @@ public class ProblemSolver2
               LA.TargetPosition = help;
               LA.ClearH();
           }
+          
+          //update state
           state = "RespondingToHelpCall";
+          
+          //give reward for helping someone (encourage helping)
           reward = 1;
       }
       
       if(state.equalsIgnoreCase("WaitingForHelp"))
       {
+          //if light enough now,
           if(myPacket.getWeight() == 0)
             {
                  //pick it up
@@ -211,7 +238,11 @@ public class ProblemSolver2
                 AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
                 ac.state = 1;
                 LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
+                
+                //update state
                 state = "MovingToDestination";
+                
+                //give reward for picking up packet
                 reward = 1;
             }
       }
@@ -220,6 +251,8 @@ public class ProblemSolver2
       {
           if(state.equalsIgnoreCase("MovingToFreePacket") || state.equalsIgnoreCase("RespondingToHelpCall"))
           {
+              
+              //if current target packet has been picked up by some other agent
             if(LA.MyStateInfo.getPacket(LA.TargetPosition) == null)
             {
                   System.out.println(name+" Choosing new packet");
@@ -228,12 +261,13 @@ public class ProblemSolver2
             }
           }
           
+          //if reached target
           if (LA.MyCurrentPos.x == LA.TargetPosition.x && LA.MyCurrentPos.y == LA.TargetPosition.y)
             {
               System.out.println(name+" Reached at ("+LA.TargetPosition.x+","+LA.TargetPosition.y+")");
 
 
-
+              //if empty handed
               if(myPacket == null)
               {
                   myPacket = LA.MyStateInfo.getPacket(LA.TargetPosition);
@@ -257,6 +291,8 @@ public class ProblemSolver2
                         ac.state = 0;
                         LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
                         isWaiting = true;
+                        
+                        //update state
                         state =  "WaitingForHelp";
                     }
                     else //if light enough
@@ -270,7 +306,11 @@ public class ProblemSolver2
                         AgentContainer ac = LA.MyObj.MyPoints.get(LA.CurrentPos);
                         ac.state = 1;
                         LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
+                        
+                        //update state
                         state = "MovingToDestination";
+                        
+                        //reward for picking up packet
                         reward = 1;
                     }
                   }
@@ -285,6 +325,8 @@ public class ProblemSolver2
                   ac.state = 0;
                   LA.MyObj.MyPoints.set(LA.CurrentPos, ac);
                   state = "Free";
+                  
+                  //high reward for delivering packet
                   reward = 10;
               }
 
