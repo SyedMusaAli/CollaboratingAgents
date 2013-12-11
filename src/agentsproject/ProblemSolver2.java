@@ -63,7 +63,7 @@ public class ProblemSolver2
     
     //Initialize Q (the state-action policy)
     initializeQ();
-    
+    int cycles = 0;
     while (LA.MyStateInfo.PacketPos.size() > 0 || myPacket != null)
     {
         String pastState;
@@ -94,7 +94,9 @@ public class ProblemSolver2
       {
 
       }
+       cycles++;
     }
+    System.out.println(name+" worked for "+cycles+" cycles");
   }
 
   private void MyTarget()

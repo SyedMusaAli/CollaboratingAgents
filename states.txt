@@ -1,0 +1,23 @@
+1)Free
+
+-ChoosePacket : 2
+-RespondToHelpCall: 5
+
+2)Moving Towards Free Packet
+
+-Continue: 2
+-RespondToHelpCall: 5
+
+3)Moving Towards Destination
+
+-Continue: 3
+
+4)Waiting for help
+
+-Continue: 4
+-ChoosePacket : 2
+-RespondToHelpCall: 5
+
+5)Responding to help call
+
+-Continue: 5		
