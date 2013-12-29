@@ -95,8 +95,10 @@ public class ProblemSolver2
 
       }
        cycles++;
+       LA.MyStateInfo.Count++;
     }
     System.out.println(name+" worked for "+cycles+" cycles");
+    LA.TargetObj.Caught = true;
   }
 
   private void MyTarget()

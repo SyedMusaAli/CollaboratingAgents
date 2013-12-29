@@ -1,5 +1,7 @@
 //package MARF.LRTA;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.sql.*;
 
 public class DBLogger
@@ -8,6 +10,16 @@ public class DBLogger
                          int NoOfMazes, int NoofTrials,int ObstacleRatio,int ObstacleIncrease,int NoOfPackets, int NoofDestinations ) throws
       Exception
   {
+      
+    PrintWriter out = new PrintWriter(new FileWriter("results.csv")); 
+    out.println("Agents,"+NoOfAgents);
+    out.println("Packets,"+NoOfPackets); 
+    out.println("Destinations,"+NoofDestinations); 
+    out.println("Grid Size,"+GridSize);
+    out.println("No of Trials,"+NoofTrials); 
+    out.close();
+      
+      /*
     String dbUrl = "jdbc:odbc:inmiclrta";
     String user = "";
     String password = "";
@@ -36,12 +48,16 @@ public class DBLogger
     finally
     {
       c.close();
-    }
+    }*/
     return 1;
   }
 
-  public void WriteDetailStats(int RunNo,int ObstacleRatio,long TimeTaken,int SolutionLength,String LC) throws Exception
+  public void WriteDetailStats(int RunNo, long TimeTaken) throws Exception
   {
+      PrintWriter out = new PrintWriter(new FileWriter("results.csv", true)); 
+      out.println(RunNo+","+TimeTaken);
+      out.close();
+      /*
     String dbUrl = "jdbc:odbc:inmiclrta";
     String user = "";
     String password = "";
@@ -64,5 +80,6 @@ public class DBLogger
     {
       c.close();
     }
+    */
   }
 }

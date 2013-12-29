@@ -38,9 +38,17 @@ public class StatesInfo
 
   public void Initialize()
   {
-    H.clear();
-    MyStates.clear();
+    Count=0;
+    H = new HashMap();
+    MyStates = new HashMap();
+    Obstacles = new HashMap();
+    Agents = new HashMap();
+    Packets = new HashMap<>();
+    MultipleTargets = new ArrayList();
+    AgentStartPos = new ArrayList();
+    PacketPos = new ArrayList();
     WritedFile = false;
+    helpCalls = new ConcurrentLinkedQueue<>();
   }
 
   public void GenerateMaze(int Dimx, int Dimy, double ObstacleRatio,

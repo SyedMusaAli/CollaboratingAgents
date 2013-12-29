@@ -3,6 +3,8 @@
 import jade.core.Agent;
 import java.util.*;
 import java.awt.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ControllerAgent
     extends Agent
@@ -25,11 +27,9 @@ public class ControllerAgent
   {
     Object[] args = getArguments();
     IVObj = (InputVariables) args[0];
-
-    while (IVObj.ObstRatio<=55)
-    {
+    
       NoofMazes=0;
-      while (NoofMazes < IVObj.NoofDifMazes)
+      while (NoofMazes <= IVObj.NoofTrials)
       {
         NoofMazes++;
 
@@ -75,7 +75,11 @@ public class ControllerAgent
 
             MyComponent MyObj = new MyComponent();
             MyStateInfo.Initialize();
-
+            
+            //generate new maze
+             MyStateInfo.GenerateMaze(IVObj.GSize.x, IVObj.GSize.y, RT,
+                                 IVObj.AgentNo,IVObj.PacketNo,IVObj.DestinationNo);
+             
             int MyAgentsLength = 0;
             myGui = new AgentGUI();
             int i;
@@ -92,6 +96,9 @@ public class ControllerAgent
               TargetObj.TargetPositions.add(TP);
               TargetObj.AddTP(TP.x,TP.y,0);
             }
+            
+            
+            
             // Initailize States With Previous Hvalues if any...
             MyStateInfo.InitStates();
 
@@ -159,6 +166,7 @@ public class ControllerAgent
             }
             while (true)
             {
+              System.out.println("Checking for stopping");
               if (TargetObj.Caught == true)
               {
                 this.doWait(1000);
@@ -179,11 +187,13 @@ public class ControllerAgent
               }
               this.doWait(100);
             }
+            try {
+            dblogger.WriteDetailStats(RunNo++, MyStateInfo.Count);
+        } catch (Exception ex) {
+            Logger.getLogger(ControllerAgent.class.getName()).log(Level.SEVERE, null, ex);
+        }
           }
         }
-        MyStateInfo.Count++;
       }
-      IVObj.ObstRatio += IVObj.ObstRatioIncrease;
-    }
   }
 }
