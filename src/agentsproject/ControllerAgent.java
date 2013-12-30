@@ -61,14 +61,11 @@ public class ControllerAgent
         {
           RunNo = 0;
         }
-        int LC;
-        for (LC = 0; LC <= 1; LC++)
-        {
+       
           Trails = 0;
           MyStateInfo.MakeFileEmpty();
 
-          while (Trails < IVObj.NoofTrials)
-          {
+          
             Trails++;
             TargetObj = new Target();
             MyAgents = new ArrayList();
@@ -133,7 +130,7 @@ public class ControllerAgent
               args[6] = IVObj;
               args[7] = dblogger;
               args[8] = RunNo + "";
-              args[9] = LC +"";
+              args[9] = 0 +"";
               jade.wrapper.AgentContainer Acontainer = (jade.wrapper.
                   AgentContainer)
                   getContainerController();
@@ -167,7 +164,7 @@ public class ControllerAgent
             while (true)
             {
               System.out.println("Checking for stopping");
-              if (TargetObj.Caught == true)
+              if (MyStateInfo.AgentsDone >= IVObj.AgentNo)
               {
                 this.doWait(1000);
                 for (int j = 0; j < MyAgentsLength; j++)
@@ -193,7 +190,7 @@ public class ControllerAgent
             Logger.getLogger(ControllerAgent.class.getName()).log(Level.SEVERE, null, ex);
         }
           }
-        }
-      }
+        
+      
   }
 }

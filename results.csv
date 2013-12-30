@@ -1,10 +1,6 @@
-Agents,1
+Agents,3
 Packets,1
 Destinations,1
 Grid Size,50x50
-No of Trials,3
-1,32
-2,27
-3,44
-4,72
-5,49
+No of Trials,2
+1,103

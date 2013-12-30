@@ -18,7 +18,7 @@ public class StatesInfo
   private Map Agents;
   //private ArrayList mytemp = new ArrayList();
   private Map<Point, Packet> Packets;
-  public int Count;
+  public int Count, AgentsDone;
   public ConcurrentLinkedQueue<Point> helpCalls;
 
   public StatesInfo()
@@ -28,6 +28,7 @@ public class StatesInfo
     MyStates = new HashMap();
     Obstacles = new HashMap();
     Agents = new HashMap();
+    AgentsDone = 0;
     Packets = new HashMap<>();
     MultipleTargets = new ArrayList();
     AgentStartPos = new ArrayList();
@@ -43,6 +44,7 @@ public class StatesInfo
     MyStates = new HashMap();
     Obstacles = new HashMap();
     Agents = new HashMap();
+    AgentsDone = 0;
     Packets = new HashMap<>();
     MultipleTargets = new ArrayList();
     AgentStartPos = new ArrayList();

@@ -98,7 +98,7 @@ public class ProblemSolver2
        LA.MyStateInfo.Count++;
     }
     System.out.println(name+" worked for "+cycles+" cycles");
-    LA.TargetObj.Caught = true;
+    LA.MyStateInfo.AgentsDone++;
   }
 
   private void MyTarget()
