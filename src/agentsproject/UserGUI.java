@@ -21,7 +21,7 @@ public class UserGUI extends JFrame implements ActionListener
 /* ==================== QUAIN Code ends here ============================== */
     //  private JTextField TargetNo;
       private JButton Syn = new JButton("Next");
-      public InputVariables IVObj;
+      public RawInputs IVObj;
       public boolean PutValues;
      
 
@@ -91,8 +91,8 @@ public class UserGUI extends JFrame implements ActionListener
         if(ent.getSource()==Syn)
         {
           String s;
-          IVObj = new InputVariables();
-          IVObj.AgentNo= Integer.parseInt(AgentNo.getText());
+          IVObj = new RawInputs();
+          IVObj.AgentNo= AgentNo.getText().split(",");
           s=VisualDepth.getText();
           String[] VD=s.split("-");
           IVObj.ViusalDepthStart= Integer.parseInt(VD[0]);
@@ -109,8 +109,8 @@ public class UserGUI extends JFrame implements ActionListener
           IVObj.ObstRatioIncrease=Integer.parseInt(ObstRatioIncrease.getText());
           IVObj.TotalRuns=Integer.parseInt(TotalRuns.getText());
 /* ==================== QUAIN Code starts here ============================ */ 
-          IVObj.PacketNo= Integer.parseInt(PacketNo.getText());
-          IVObj.DestinationNo= Integer.parseInt(DestinationNo.getText());
+          IVObj.PacketNo= PacketNo.getText().split(",");
+          IVObj.DestinationNo= DestinationNo.getText().split(",");
 /* ==================== QUAIN Code ends here ============================== */
           s=VisualDepth.getText();
           PutValues=true;

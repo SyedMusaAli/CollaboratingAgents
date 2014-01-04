@@ -2,9 +2,9 @@
 
 import java.awt.*;
 
-public class InputVariables
+public class RawInputs
 {
-  public int AgentNo;
+  public String[] AgentNo;
   public int NoofDifMazes;
   public Point GSize;
   public int ViusalDepthStart;
@@ -14,24 +14,13 @@ public class InputVariables
   public int ObstRatioIncrease;
   public int TotalRuns;
 /* ==================== QUAIN Code starts here ============================== */
-  public int PacketNo;
-  public int DestinationNo;
+  public String[] PacketNo;
+  public String[] DestinationNo;
 /* ==================== QUAIN Code ends here ============================== */
  // public int TargetNo;
-  public InputVariables()
+  public RawInputs()
   {
     GSize = new Point();
   }
-  
-  public InputVariables(RawInputs IV)
-  {
-    GSize = IV.GSize;
-    NoofDifMazes = IV.NoofDifMazes;
-    ViusalDepthStart = IV.ViusalDepthStart;
-    ViusalDepthEnd = IV.ViusalDepthEnd;
-    NoofTrials = IV.NoofTrials;
-    ObstRatio = IV.ObstRatio;
-    ObstRatioIncrease = IV.ObstRatioIncrease;
-    TotalRuns = IV.TotalRuns;
-  }
+
 }

@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class InitializeAgent extends Agent
 {
-  public InputVariables IVObj;
+  public RawInputs IVObj;
   jade.wrapper.AgentController a = null;
   protected void setup()
   {
