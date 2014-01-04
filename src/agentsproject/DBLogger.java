@@ -11,7 +11,7 @@ public class DBLogger
       Exception
   {
       
-    PrintWriter out = new PrintWriter(new FileWriter("results.csv")); 
+    PrintWriter out = new PrintWriter(new FileWriter("results.csv", true)); 
     out.println("Agents,"+NoOfAgents);
     out.println("Packets,"+NoOfPackets); 
     out.println("Destinations,"+NoofDestinations); 

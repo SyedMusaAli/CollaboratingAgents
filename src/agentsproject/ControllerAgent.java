@@ -28,7 +28,7 @@ public class ControllerAgent
   {
     Object[] args = getArguments();
     mainIV = (RawInputs) args[0];
-    
+    DBLogger dblogger = new DBLogger();
     for(String agent: mainIV.AgentNo)
     {
         for(String packetNo: mainIV.PacketNo)
@@ -42,22 +42,7 @@ public class ControllerAgent
             IVObj.DestinationNo = Integer.parseInt(destinationNo);
 
               NoofMazes=0;
-              while (NoofMazes < IVObj.NoofTrials)
-              {
-                NoofMazes++;
-
-                StatesInfo MyStateInfo = new StatesInfo();
-
-                MyStateInfo.MakeFileEmpty();
-                double RT = IVObj.ObstRatio * 0.01;
-                MyStateInfo.GenerateMaze(IVObj.GSize.x, IVObj.GSize.y, RT,
-                                         IVObj.AgentNo,IVObj.PacketNo,IVObj.DestinationNo);
-
-                /****************************************************
-                 ** Write Master Records In DataBase
-                 ***************************************************/
-                DBLogger dblogger = new DBLogger();
-                int RunNo = 0;
+              int RunNo = 0;
                 try
                 {
                   RunNo = dblogger.WriteMasterStats(IVObj.AgentNo,
@@ -74,6 +59,23 @@ public class ControllerAgent
                 {
                   RunNo = 0;
                 }
+              
+              while (NoofMazes < IVObj.NoofTrials)
+              {
+                NoofMazes++;
+
+                StatesInfo MyStateInfo = new StatesInfo();
+
+                MyStateInfo.MakeFileEmpty();
+                double RT = IVObj.ObstRatio * 0.01;
+                MyStateInfo.GenerateMaze(IVObj.GSize.x, IVObj.GSize.y, RT,
+                                         IVObj.AgentNo,IVObj.PacketNo,IVObj.DestinationNo);
+
+                /****************************************************
+                 ** Write Master Records In DataBase
+                 ***************************************************/
+                
+                
 
                   Trails = 0;
                   MyStateInfo.MakeFileEmpty();

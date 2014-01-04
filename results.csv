@@ -1,6 +1,104 @@
-Agents,4
-Packets,4
-Destinations,4
+Agents,1
+Packets,1
+Destinations,1
 Grid Size,50x50
-No of Trials,1
-1,671
+No of Trials,3
+1,42
+Agents,1
+Packets,1
+Destinations,1
+Grid Size,50x50
+No of Trials,3
+1,14
+Agents,1
+Packets,1
+Destinations,1
+Grid Size,50x50
+No of Trials,3
+1,35
+Agents,1
+Packets,2
+Destinations,1
+Grid Size,50x50
+No of Trials,3
+1,135
+Agents,1
+Packets,2
+Destinations,1
+Grid Size,50x50
+No of Trials,3
+1,123
+Agents,1
+Packets,2
+Destinations,1
+Grid Size,50x50
+No of Trials,3
+1,50
+Agents,2
+Packets,1
+Destinations,1
+Grid Size,50x50
+No of Trials,3
+1,111
+Agents,2
+Packets,1
+Destinations,1
+Grid Size,50x50
+No of Trials,3
+1,135
+Agents,2
+Packets,1
+Destinations,1
+Grid Size,50x50
+No of Trials,3
+1,77
+Agents,2
+Packets,2
+Destinations,1
+Grid Size,50x50
+No of Trials,3
+1,106
+Agents,2
+Packets,2
+Destinations,1
+Grid Size,50x50
+No of Trials,3
+1,109
+Agents,2
+Packets,2
+Destinations,1
+Grid Size,50x50
+No of Trials,3
+1,105
+Agents,1
+Packets,1
+Destinations,1
+Grid Size,50x50
+No of Trials,3
+1,55
+2,40
+3,54
+Agents,1
+Packets,2
+Destinations,1
+Grid Size,50x50
+No of Trials,3
+1,52
+2,140
+3,51
+Agents,2
+Packets,1
+Destinations,1
+Grid Size,50x50
+No of Trials,3
+1,179
+2,69
+3,190
+Agents,2
+Packets,2
+Destinations,1
+Grid Size,50x50
+No of Trials,3
+1,94
+2,298
+3,341
