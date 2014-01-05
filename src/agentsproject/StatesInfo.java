@@ -405,5 +405,17 @@ public class StatesInfo
     {
         while(helpCalls.remove(p));
     }
+    
+    
+  public int getTotalWeight()
+  {
+      int sum =0;
+      for(Packet p: Packets.values())
+      {
+          sum += p.getWeight();
+      }
+      return sum;
+  }
+    
 /* ==================== QUAIN Code ends here ============================== */ 
 }

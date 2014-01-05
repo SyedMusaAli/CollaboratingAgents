@@ -19,6 +19,7 @@ public class DBLogger
         out.print("NoOfAgents,");
         out.print("NoOfPackets,"); 
         out.print("NoofDestinations,"); 
+        out.print("Total Weight,"); 
         out.println("RunNo,TimeTaken");
         out.close();
         } catch (IOException ex) {
@@ -26,7 +27,7 @@ public class DBLogger
         }
     }
   public void WriteMasterStats(int NoOfAgents, String GridSize,
-                         int NoOfMazes, int NoofTrials,int ObstacleRatio,int ObstacleIncrease,int NoOfPackets, int NoofDestinations,int RunNo, long TimeTaken ) throws
+                         int NoOfMazes, int NoofTrials,int ObstacleRatio,int ObstacleIncrease,int NoOfPackets, int NoofDestinations,int RunNo, long TimeTaken , int totalWeight) throws
       Exception
   {
       
@@ -34,7 +35,8 @@ public class DBLogger
     out.print(GridSize+",");
     out.print(NoOfAgents+",");
     out.print(NoOfPackets+","); 
-    out.print(NoofDestinations+","); 
+    out.print(NoofDestinations+",");
+    out.print(totalWeight+",");
     out.println(RunNo+","+TimeTaken);
     out.close();
   }

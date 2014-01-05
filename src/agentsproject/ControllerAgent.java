@@ -78,6 +78,7 @@ public class ControllerAgent
                                          IVObj.AgentNo,IVObj.PacketNo,IVObj.DestinationNo);
 
                     int MyAgentsLength = 0;
+                    int totalWeight = MyStateInfo.getTotalWeight();
                     myGui = new AgentGUI();
                     int i;
                     TargetObj.NoofTargets = IVObj.DestinationNo;
@@ -194,7 +195,7 @@ public class ControllerAgent
                                                     IVObj.ObstRatio,
                                                     IVObj.ObstRatioIncrease,
                                                     IVObj.PacketNo,
-                                                    IVObj.DestinationNo, RunNo++, MyStateInfo.Count);
+                                                    IVObj.DestinationNo, RunNo++, MyStateInfo.Count, totalWeight);
                 } catch (Exception ex) {
                     Logger.getLogger(ControllerAgent.class.getName()).log(Level.SEVERE, null, ex);
                 }
