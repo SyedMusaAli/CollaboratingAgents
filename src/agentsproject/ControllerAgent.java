@@ -43,22 +43,7 @@ public class ControllerAgent
 
               NoofMazes=0;
               int RunNo = 0;
-                try
-                {
-                  RunNo = dblogger.WriteMasterStats(IVObj.AgentNo,
-                                                    IVObj.GSize.x + "x" +
-                                                    IVObj.GSize.y,
-                                                    IVObj.NoofDifMazes,
-                                                    IVObj.NoofTrials,
-                                                    IVObj.ObstRatio,
-                                                    IVObj.ObstRatioIncrease,
-                                                    IVObj.PacketNo,
-                                                    IVObj.DestinationNo);
-                }
-                catch (Exception Ex)
-                {
-                  RunNo = 0;
-                }
+               
               
               while (NoofMazes < IVObj.NoofTrials)
               {
@@ -201,7 +186,15 @@ public class ControllerAgent
                       this.doWait(100);
                     }
                     try {
-                    dblogger.WriteDetailStats(RunNo++, MyStateInfo.Count);
+                    dblogger.WriteMasterStats(IVObj.AgentNo,
+                                                    IVObj.GSize.x + "x" +
+                                                    IVObj.GSize.y,
+                                                    IVObj.NoofDifMazes,
+                                                    IVObj.NoofTrials,
+                                                    IVObj.ObstRatio,
+                                                    IVObj.ObstRatioIncrease,
+                                                    IVObj.PacketNo,
+                                                    IVObj.DestinationNo, RunNo++, MyStateInfo.Count);
                 } catch (Exception ex) {
                     Logger.getLogger(ControllerAgent.class.getName()).log(Level.SEVERE, null, ex);
                 }
