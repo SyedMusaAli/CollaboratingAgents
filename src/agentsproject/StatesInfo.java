@@ -353,8 +353,9 @@ public class StatesInfo
       {
 	       double distance;
 	       Point PP = (Point) PacketPos.get(i);
-               if(getPacket(PP.x, PP.y).isTaken())
-                   continue;
+               if(getPacket(PP.x, PP.y) != null)
+                   if(getPacket(PP.x, PP.y).isTaken())
+                    continue;
 	       int px=PP.x;
 	       int py=PP.y; 
 	       distance = Math.sqrt(((ax-px)*(ax-px))+((ay-py)*(ay-py)));

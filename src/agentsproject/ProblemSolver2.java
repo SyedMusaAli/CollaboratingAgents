@@ -88,7 +88,7 @@ public class ProblemSolver2
        try
       {
         LA.myGui.RePaintWindow();
-        doWait(200);
+        doWait(20);
       }
       catch (Exception ex)
       {
