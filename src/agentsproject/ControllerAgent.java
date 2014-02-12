@@ -162,6 +162,8 @@ public class ControllerAgent
                         System.out.println("Problem while starting new agent");
                       }
                     }
+                    
+                    long startTime = System.currentTimeMillis();
                     while (true)
                     {
                       System.out.println("Checking for stopping");
@@ -186,6 +188,9 @@ public class ControllerAgent
                       }
                       this.doWait(100);
                     }
+                    
+                    long endTime = System.currentTimeMillis();
+                    
                     try {
                     dblogger.WriteMasterStats(IVObj.AgentNo,
                                                     IVObj.GSize.x + "x" +
@@ -195,7 +200,7 @@ public class ControllerAgent
                                                     IVObj.ObstRatio,
                                                     IVObj.ObstRatioIncrease,
                                                     IVObj.PacketNo,
-                                                    IVObj.DestinationNo, RunNo++, MyStateInfo.Count, totalWeight);
+                                                    IVObj.DestinationNo, RunNo++, endTime-startTime, totalWeight);
                 } catch (Exception ex) {
                     Logger.getLogger(ControllerAgent.class.getName()).log(Level.SEVERE, null, ex);
                 }
