@@ -1,5 +1,4 @@
 
-
 import agentsproject.Packet;
 import java.util.*;
 import java.awt.*;
@@ -20,6 +19,7 @@ public class StatesInfo
   private Map<Point, Packet> Packets;
   public int Count, AgentsDone;
   public ConcurrentLinkedQueue<Point> helpCalls;
+  public long startTime, endTime;
 
   public StatesInfo()
   {
