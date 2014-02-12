@@ -64,6 +64,7 @@ public class ProblemSolver2
     //Initialize Q (the state-action policy)
     initializeQ();
     int cycles = 0;
+    long lStartTime = System.currentTimeMillis();
     while (LA.MyStateInfo.PacketPos.size() > 0 || myPacket != null)
     {
         String pastState;
@@ -97,7 +98,9 @@ public class ProblemSolver2
        cycles++;
        LA.MyStateInfo.Count++;
     }
-    System.out.println(name+" worked for "+cycles+" cycles");
+    long lEndTime = System.currentTimeMillis();
+    long difference = lEndTime - lStartTime;
+    System.out.println(name+" worked for "+cycles+" cycles in "+difference+" milliseconds");
     LA.MyStateInfo.AgentsDone++;
   }
 
